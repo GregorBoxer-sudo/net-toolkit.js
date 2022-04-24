@@ -1,0 +1,13 @@
+{
+  "name": "netJS",
+  "version": "1.0.0",
+  "description": "Network-tools for nodeJS",
+  "main": "index.js",
+  "repository": "https://github.com/GregorBoxer-sudo/netJS.git",
+  "author": "Gregor Katzschner",
+  "license": "MIT",
+  "dependencies": {
+    "ipv6": "^2.0.2",
+    "ping": "^0.4.1"
+  }
+}
