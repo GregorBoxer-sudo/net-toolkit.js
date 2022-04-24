@@ -1,6 +1,6 @@
 {
   "name": "net-toolkit.js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Network-tools for nodeJS",
   "main": "index.js",
   "repository": "https://github.com/GregorBoxer-sudo/network-tools.js",
