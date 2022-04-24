@@ -1,5 +1,5 @@
 {
-  "name": "netJS",
+  "name": "net-toolkit.js",
   "version": "1.0.0",
   "description": "Network-tools for nodeJS",
   "main": "index.js",
@@ -9,5 +9,14 @@
   "dependencies": {
     "ipv6": "^2.0.2",
     "ping": "^0.4.1"
-  }
+  },
+  "keywords": [
+    "network",
+    "ping",
+    "ipv6",
+    "nodejs",
+    "portscanner",
+    "port",
+    "ipv4"
+  ]
 }
