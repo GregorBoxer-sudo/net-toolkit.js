@@ -1,4 +1,4 @@
-# Network-Toolkit.js
+# Net-Toolkit.js
 Collection of Tools for Network interaction
 
 ## Quickstart
