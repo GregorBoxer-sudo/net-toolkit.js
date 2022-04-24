@@ -1,13 +1,12 @@
 {
   "name": "net-toolkit.js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Network-tools for nodeJS",
   "main": "index.js",
   "repository": "https://github.com/GregorBoxer-sudo/network-tools.js",
   "author": "Gregor Katzschner",
   "license": "MIT",
   "dependencies": {
-    "ipv6": "^2.0.2",
     "ping": "^0.4.1"
   },
   "keywords": [
