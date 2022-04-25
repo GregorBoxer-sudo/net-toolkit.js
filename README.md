@@ -411,6 +411,9 @@ obviously it only works if an hostname is registered
 ---
 ## Changelog
 
+### v1.0.8
+- changed to module.exports
+
 ### 1.0.7
 - Changed from require to import
 - added Documentation for all functions

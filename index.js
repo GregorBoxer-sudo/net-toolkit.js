@@ -719,7 +719,7 @@ async function getLocalNetworkCidr() {
     return localNetworkCidr;
 }
 
-export {
+module.exports = {
     checkConnection,
     getDevices,
     getLocalIpv4,
@@ -730,7 +730,7 @@ export {
     pingIp,
     checkPingIp,
     isLocalhost,
-    getLocalIpAddressesWithSpecifiedOpenPort as getLocalIpAddressesWithSpeicifedOpenPort,
+    getLocalIpAddressesWithSpecifiedOpenPort,
     getOpenPortsOfIpInRange,
     getOpenPortsOfIp,
     getOpenPortsOfLocalNetworkInRange,
