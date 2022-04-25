@@ -400,16 +400,20 @@ obviously it only works if an hostname is registered
 
 ### getLocalNetworkCidr
 
-> With this function you can get the local network cidr
+> With this function you can get all the local network cidr
 <br>
-@returns local network cidr
+@returns all local network cidr
 
 ```javascript
     const localNetworkCidr = await netJS.getLocalNetworkCidr()
 ```
 
 ---
+
 ## Changelog
+
+### v1.1.0
+- fixed documentation
 
 ### v1.0.9
 - added v to changelog v1.0.7
