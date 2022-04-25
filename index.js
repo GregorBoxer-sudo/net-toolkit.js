@@ -2,13 +2,19 @@
 /* Copyright 2022 Gregor Katzschner */
 /*----------------------------------*/
 
+import * as os from "os";
+import * as https from "https";
+import * as net from "net";
+import * as dns from "dns";
+import WebSocket from "ws";
+import * as ping from "ping";
+
 /**
  * This function returns the local ipv4 address of the machine.
  * @returns The function returns the local ipv4 address of the machine.
  */
 function getLocalIpv4() {
     return new Promise(function (resolve, reject) {
-        const os = require('os');
         const ifaces = os.networkInterfaces();
         let ipv4 = '';
         Object.keys(ifaces).forEach(function (ifname) {
@@ -39,7 +45,6 @@ function getLocalIpv4() {
  */
 function getLocalIpv6() {
     return new Promise(function (resolve, reject) {
-        const os = require('os');
         const ifaces = os.networkInterfaces();
         let ipv6 = '';
         Object.keys(ifaces).forEach(function (ifname) {
@@ -65,12 +70,86 @@ function getLocalIpv6() {
 }
 
 /**
+ * This function returns a promise that resolves to an array of ipv4 addresses of the local machine.
+ * @returns The promise resolves to an array of ipv4 addresses of the local machine.
+ */
+function getLocalIpv4s() {
+    return new Promise(function (resolve, reject) {
+        const ifaces = os.networkInterfaces();
+        let ipv4s = [];
+        Object.keys(ifaces).forEach(function (ifname) {
+            let alias = 0;
+            ifaces[ifname].forEach(function (iface) {
+                if ('IPv4' !== iface.family || iface.internal !== false) {
+                    // skip over internal (i.e. unknown) and non-ipv4 addresses
+                    return;
+                } else if (alias >= 1) {
+                    // this single interface has multiple ipv4 addresses
+                    // console.log(ifname + ':' + alias, iface.address);
+                    ipv4s.push(iface.address);
+                } else {
+                    // this interface has only one ipv4 adress
+                    // console.log(ifname, iface.address);
+                    ipv4s.push(iface.address);
+                }
+                ++alias;
+            });
+        });
+        resolve(ipv4s);
+    });
+}
+
+/**
+ * This function returns a promise that resolves to an array of ipv6 addresses of the local machine.
+ * @returns The promise resolves to an array of ipv6 addresses of the local machine.
+ */
+function getLocalIpv6s() {
+    return new Promise(function (resolve, reject) {
+        const ifaces = os.networkInterfaces();
+        let ipv6s = [];
+        Object.keys(ifaces).forEach(function (ifname) {
+            let alias = 0;
+            ifaces[ifname].forEach(function (iface) {
+                if ('IPv6' !== iface.family || iface.internal !== false) {
+                    // skip over internal (i.e. unknown) and non-ipv6 addresses
+                    return;
+                } else if (alias >= 1) {
+                    // this single interface has multiple ipv6 addresses
+                    // console.log(ifname + ':' + alias, iface.address);
+                    ipv6s.push(iface.address);
+                } else {
+                    // this interface has only one ipv6 adress
+                    // console.log(ifname, iface.address);
+                    ipv6s.push(iface.address);
+                }
+                ++alias;
+            });
+        });
+        resolve(ipv6s);
+    });
+}
+
+/**
+ * Get the local ipv4 and ipv6 addresses.
+ * @returns A promise that resolves to an object with ipv4 and ipv6 keys.
+ */
+async function getLocalIpv4AndIpv6() {
+    const ipv4 = await getLocalIpv4s();
+    const ipv6 = await getLocalIpv6s();
+    return new Promise(function (resolve, reject) {
+        resolve({
+            ipv4: ipv4,
+            ipv6: ipv6,
+        });
+    });
+}
+
+/**
  * This function returns the external IPv4 address of the machine it is run on.
  * @returns The function returns the external IPv4 address of the machine it is run on.
  */
 function getExternalIpv4() {
     return new Promise(function (resolve, reject) {
-        const https = require('https');
         const options = {
             host: 'api.ipify.org',
             port: 443,
@@ -102,7 +181,6 @@ function getExternalIpv4() {
  */
 function getExternalIpv6() {
     return new Promise(function (resolve, reject) {
-        const https = require('https');
         const options = {
             host: 'api6.ipify.org',
             port: 443,
@@ -134,7 +212,6 @@ function getExternalIpv6() {
  */
 function isConnected() {
     return new Promise(function (resolve, reject) {
-        const https = require('https');
         const options = {
             host: 'api.ipify.org',
             port: 443,
@@ -160,7 +237,6 @@ function isConnected() {
  */
 function checkConnection(ip, port, timeout) {
     return new Promise(function (resolve, reject) {
-        const net = require('net');
         const socket = new net.Socket();
         socket.setTimeout(timeout);
         socket.on('connect', () => {
@@ -187,7 +263,6 @@ function checkConnection(ip, port, timeout) {
  */
 function checkHttp(ip, port) {
     return new Promise(function (resolve, reject) {
-        const https = require('https');
         const options = {
             host: ip,
             port: port,
@@ -212,7 +287,6 @@ function checkHttp(ip, port) {
  */
 function checkWs(ip, port) {
     return new Promise(function (resolve, reject) {
-        const WebSocket = require('ws');
         const ws = new WebSocket('ws://' + ip + ':' + port);
         ws.on('open', () => {
             ws.close();
@@ -232,7 +306,6 @@ function checkWs(ip, port) {
  */
 function getIpArrayFromHostname(hostname) {
     return new Promise(function (resolve, reject) {
-        const dns = require('dns');
         const options = {
             all: true,
         };
@@ -253,7 +326,6 @@ function getIpArrayFromHostname(hostname) {
  */
 function getIpv4FromHostname(hostname) {
     return new Promise(function (resolve, reject) {
-        const dns = require('dns');
         const options = {
             family: 4,
             hints: dns.ADDRCONFIG | dns.V4MAPPED,
@@ -276,7 +348,6 @@ function getIpv4FromHostname(hostname) {
  */
 function getIpv6FromHostname(hostname) {
     return new Promise(function (resolve, reject) {
-        const dns = require('dns');
         const options = {
             family: 6,
             hints: dns.ADDRCONFIG | dns.V4MAPPED,
@@ -299,7 +370,6 @@ function getIpv6FromHostname(hostname) {
  */
 function getIpv4FromIpv6(ipv6) {
     return new Promise(function (resolve, reject) {
-        const dns = require('dns');
         const options = {
             family: 4,
             hints: dns.ADDRCONFIG | dns.V4MAPPED,
@@ -322,7 +392,6 @@ function getIpv4FromIpv6(ipv6) {
  */
 function getIpv6FromIpv4(ipv4) {
     return new Promise(function (resolve, reject) {
-        const dns = require('dns');
         const options = {
             family: 6,
             hints: dns.ADDRCONFIG | dns.V4MAPPED,
@@ -345,7 +414,6 @@ function getIpv6FromIpv4(ipv4) {
  */
 function getHostnameFromIpv4(ipv4) {
     return new Promise(function (resolve, reject) {
-        const dns = require('dns');
         const hostname = dns.reverse(ipv4, (err, hostnames) => {
             if (err) {
                 reject(err);
@@ -363,7 +431,6 @@ function getHostnameFromIpv4(ipv4) {
  */
 function getHostnameFromIpv6(ipv6) {
     return new Promise(function (resolve, reject) {
-        const dns = require('dns');
         const hostname = dns.reverse(ipv6, (err, hostnames) => {
             if (err) {
                 reject(err);
@@ -380,7 +447,6 @@ function getHostnameFromIpv6(ipv6) {
  */
 function getMacAddresses() {
     return new Promise(function (resolve, reject) {
-        const os = require('os');
         const ifaces = os.networkInterfaces();
         const macAddresses = [];
         Object.keys(ifaces).forEach(function (ifname) {
@@ -422,7 +488,6 @@ function getAllIpv4Addresses(ipv4) {
  */
 function getDevices(timeout) {
     return new Promise(async function (resolve, reject) {
-        const ping = require('ping');
         const devices = [];
         const possibleAdresses = await getAllIpv4Addresses(await getLocalIpv4());
         await Promise.all(possibleAdresses.map(async function (address) {
@@ -447,7 +512,6 @@ function getDevices(timeout) {
  */
 function getGateways() {
     return new Promise(function (resolve, reject) {
-        const os = require('os');
         const ifaces = os.networkInterfaces();
         const gateways = [];
         Object.keys(ifaces).forEach(function (ifname) {
@@ -471,7 +535,6 @@ function getGateways() {
  */
 function getNetmasks() {
     return new Promise(function (resolve, reject) {
-        const os = require('os');
         const ifaces = os.networkInterfaces();
         const netmasks = [];
         Object.keys(ifaces).forEach(function (ifname) {
@@ -495,13 +558,27 @@ function getNetmasks() {
  * @param timeout - the timeout in milliseconds
  * @returns The function returns a promise that resolves with the result of the ping.
  */
-function ping(ip, timeout) {
+function pingIp(ip, timeout) {
     return new Promise(function (resolve, reject) {
-        const ping = require('ping');
         const result = ping.promise.probe(ip, {
             timeout: timeout / 1000,
         });
         resolve(result);
+    });
+}
+
+/**
+ * Given an ip address and a timeout, return true if the ip address responds to a ping request, otherwise return false.
+ * @param ip - the ip address to ping
+ * @param timeout - the timeout in milliseconds
+ * @returns The function returns true or false depending on whether the ip address responds to a ping request.
+ */
+function checkPingIp(ip, timeout) {
+    return new Promise(function (resolve, reject) {
+        const result = ping.promise.probe(ip, {
+            timeout: timeout / 1000,
+        });
+        resolve(result.alive);
     });
 }
 
@@ -520,9 +597,8 @@ function isLocalhost(ip) {
  * @param timeout - the timeout in milliseconds
  * @returns The function returns an array of IP addresses that have a server running on the specified port.
  */
-function getLocalIpAddressesWithSpeicifedOpenPort(port, timeout) {
+function getLocalIpAddressesWithSpecifiedOpenPort(port, timeout) {
     return new Promise(async function (resolve, reject) {
-        const net = require('net');
         const devices = await getDevices();
         const openIpAddresses = [];
         await Promise.all(devices.map(async function (ip) {
@@ -643,14 +719,18 @@ async function getLocalNetworkCidr() {
     return localNetworkCidr;
 }
 
-module.exports = {
+export {
     checkConnection,
     getDevices,
     getLocalIpv4,
     getLocalIpv6,
-    ping,
+    getLocalIpv4s,
+    getLocalIpv6s,
+    getLocalIpv4AndIpv6,
+    pingIp,
+    checkPingIp,
     isLocalhost,
-    getLocalIpAddressesWithSpeicifedOpenPort,
+    getLocalIpAddressesWithSpecifiedOpenPort as getLocalIpAddressesWithSpeicifedOpenPort,
     getOpenPortsOfIpInRange,
     getOpenPortsOfIp,
     getOpenPortsOfLocalNetworkInRange,
