@@ -15,7 +15,7 @@ async function start () {
     console.log( await netJS.getLocalIpv4() );
 
     // we want to check if it's the localhost
-    console.log( await netJS.isLocalHost() );
+    console.log( await netJS.isLocalhost() );
 
     // we want to get all connected client in the local networks and their open ports (within a range of 0 to 100) with a timeout of a 1000 milliseconds
     console.log( await netJS.getOpenPortsOfLocalNetworkInRange( 0, 100, 1000) );
@@ -415,6 +415,11 @@ obviously it only works if an hostname is registered
 - import
 
 ## Changelog
+
+### v1.1.2
+- fixed documentation
+- fixed isLocalhosts
+- fixed import
 
 ### v1.1.1
 - reverted to require
