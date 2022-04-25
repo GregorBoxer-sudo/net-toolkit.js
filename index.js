@@ -2,12 +2,12 @@
 /* Copyright 2022 Gregor Katzschner */
 /*----------------------------------*/
 
-import * as os from "os";
-import * as https from "https";
-import * as net from "net";
-import * as dns from "dns";
-import WebSocket from "ws";
-import * as ping from "ping";
+const os = require('os');
+const https = require('https');
+const net = require('net');
+const dns = require('dns');
+const ping = require('ping');
+const WebSocket = require('ws');
 
 /**
  * This function returns the local ipv4 address of the machine.
@@ -719,7 +719,7 @@ async function getLocalNetworkCidr() {
     return localNetworkCidr;
 }
 
-export {
+module.exports = {
     checkConnection,
     getDevices,
     getLocalIpv4,
@@ -730,7 +730,7 @@ export {
     pingIp,
     checkPingIp,
     isLocalhost,
-    getLocalIpAddressesWithSpecifiedOpenPort as getLocalIpAddressesWithSpeicifedOpenPort,
+    getLocalIpAddressesWithSpecifiedOpenPort,
     getOpenPortsOfIpInRange,
     getOpenPortsOfIp,
     getOpenPortsOfLocalNetworkInRange,

@@ -1,7 +1,7 @@
-import * as netJS from '../index.js'
+const netJS = require('../index.js');
 
 async function run() {
-    console.log(await netJS.getAllIpv4AddressesWithNetmask('192.168.178.1', '255.255.255.0'))
+    console.log(await netJS.pingIp('192.168.178.1'));
 }
 
 run();

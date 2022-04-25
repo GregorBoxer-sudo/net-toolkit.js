@@ -6,7 +6,7 @@ Collection of Tools for Network interaction
 
 ```javascript
 // import Net-Toolkit
-import * as netJS from 'net-toolkit.js';
+const netJS = require('net-toolkit.js');
 
 // starting async function
 async function start () {
@@ -410,7 +410,15 @@ obviously it only works if an hostname is registered
 
 ---
 
+## Future support
+- typesript definitions
+- import
+
 ## Changelog
+
+### v1.1.1
+- reverted to require
+- added future list
 
 ### v1.1.0
 - fixed documentation
