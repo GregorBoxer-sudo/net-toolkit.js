@@ -323,7 +323,7 @@ obviously it only works if an hostname is registered
 @returns true if the given ip adress is localhost
 
 ```javascript
-    const ping = await netJS.isLocalhost(ip)
+    const localhost = await netJS.isLocalhost(ip)
 ```
 
 ### getLocalIpAdressesWithSpecifiedOpenPort
@@ -411,13 +411,13 @@ obviously it only works if an hostname is registered
 ---
 
 ## Future support
-- typesript definitions
-- import
+-----------
 
 ## Changelog
 
 ### v1.1.4
 - finally fixed the fixed non working imports
+- fixed stuff in documentation
 
 ### v1.1.2
 - fixed documentation
