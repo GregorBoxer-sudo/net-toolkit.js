@@ -6,8 +6,8 @@ const os = require('os');
 const https = require('https');
 const net = require('net');
 const dns = require('dns');
-const WebSocket = require('ws');
 const ping = require('ping');
+const WebSocket = require('ws');
 
 /**
  * This function returns the local ipv4 address of the machine.
@@ -587,8 +587,8 @@ function checkPingIp(ip, timeout) {
  * @param ip - the ip address to check
  * @returns The function returns true or false depending on whether the ip address is localhost.
  */
-async function isLocalhost(ip) {
-    return ip === await getLocalIpv4() || ip === await getLocalIpv6();
+function isLocalhost(ip) {
+    return ip === getLocalIpv4() || ip === getLocalIpv6();
 }
 
 /**

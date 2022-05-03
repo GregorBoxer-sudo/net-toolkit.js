@@ -416,6 +416,9 @@ obviously it only works if an hostname is registered
 
 ## Changelog
 
+### v1.1.3
+- finally fixed the fixed non working imports
+
 ### v1.1.2
 - fixed documentation
 - fixed isLocalhosts
