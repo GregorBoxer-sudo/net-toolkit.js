@@ -20,7 +20,7 @@ function getLocalIpv4() {
         Object.keys(ifaces).forEach(function (ifname) {
             let alias = 0;
             ifaces[ifname].forEach(function (iface) {
-                if (4 !== iface.family || iface.internal !== false) {
+                if ((4 !== iface.family && "IPv4" !== iface.family) || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else if (alias >= 1) {
@@ -50,7 +50,7 @@ function getLocalIpv6() {
         Object.keys(ifaces).forEach(function (ifname) {
             let alias = 0;
             ifaces[ifname].forEach(function (iface) {
-                if (6 !== iface.family || iface.internal !== false) {
+                if ((6 !== iface.family && "IPv6" !== iface.family) || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv6 addresses
                     return;
                 } else if (alias >= 1) {
@@ -80,7 +80,7 @@ function getLocalIpv4s() {
         Object.keys(ifaces).forEach(function (ifname) {
             let alias = 0;
             ifaces[ifname].forEach(function (iface) {
-                if (4 !== iface.family || iface.internal !== false) {
+                if ((4 !== iface.family && "IPv4" !== iface.family) || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else if (alias >= 1) {
@@ -110,7 +110,7 @@ function getLocalIpv6s() {
         Object.keys(ifaces).forEach(function (ifname) {
             let alias = 0;
             ifaces[ifname].forEach(function (iface) {
-                if (6 !== iface.family || iface.internal !== false) {
+                if ((6 !== iface.family && "IPv6" !== iface.family) || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv6 addresses
                     return;
                 } else if (alias >= 1) {
@@ -451,7 +451,7 @@ function getMacAddresses() {
         const macAddresses = [];
         Object.keys(ifaces).forEach(function (ifname) {
             ifaces[ifname].forEach(function (iface) {
-                if (4 !== iface.family || iface.internal !== false) {
+                if ((4 !== iface.family && "IPv4" !== iface.family) || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else {
@@ -516,7 +516,7 @@ function getGateways() {
         const gateways = [];
         Object.keys(ifaces).forEach(function (ifname) {
             ifaces[ifname].forEach(function (iface) {
-                if (4 !== iface.family || iface.internal !== false) {
+                if ((4 !== iface.family && "IPv4" !== iface.family) || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else {
@@ -539,7 +539,7 @@ function getNetmasks() {
         const netmasks = [];
         Object.keys(ifaces).forEach(function (ifname) {
             ifaces[ifname].forEach(function (iface) {
-                if (4 !== iface.family || iface.internal !== false) {
+                if ((4 !== iface.family && "IPv4" !== iface.family) || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else {
@@ -587,7 +587,6 @@ function checkPingIp(ip, timeout) {
  * @param ip - the ip address to check
  * @returns The function returns true or false depending on whether the ip address is localhost.
  */
-// todo fix documentation
 async function isLocalhost(ip) {
     return ip === await getLocalIpv4() || ip === await getLocalIpv6() || ip === '127.0.0.1' || ip === '::1' || ip === 'localhost';
 }
@@ -604,7 +603,7 @@ function getLocalIpAddressesWithSpecifiedOpenPort(port, timeout) {
         const openIpAddresses = [];
         await Promise.all(devices.map(async function (ip) {
             try {
-                const result = await ping(ip);
+                const result = await pingIp(ip);
                 if (result.alive) {
                     const socket = new net.Socket();
                     socket.setTimeout(timeout);
