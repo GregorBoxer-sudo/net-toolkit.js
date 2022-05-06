@@ -210,14 +210,14 @@ declare module 'netJS';
   * @param timeout - the timeout in milliseconds
   * @returns The function returns an array of objects containing the ip address and the open ports of the local network.
   */
- declare function getOpenPortsOfLocalNetworkInRange(startPort: number, endPort: number, timeout?: number) : Promise<{ip: string, ports: number[]}[]>;
+ declare function getOpenPortsOnLocalNetworkInRange(startPort: number, endPort: number, timeout?: number) : Promise<{ip: string, ports: number[]}[]>;
  
  /**
   * Given a timeout, return an array of objects containing the ip and open ports of all devices on the local network.
   * @param timeout - the timeout in milliseconds
   * @returns The function returns an array of objects containing the ip and open ports of all devices on the local network.
   */
- declare function getOpenPortsOfLocalNetwork(timeout?: number) : Promise<{ip: string, ports: number[]}[]>;
+ declare function getOpenPortsOnLocalNetwork(timeout?: number) : Promise<{ip: string, ports: number[]}[]>;
  
  /**
   * Returns an array of all cidr on the local network interfaces.
@@ -255,7 +255,7 @@ declare module 'netJS';
     getLocalIpAddressesWithSpecifiedOpenPort,
     getOpenPortsOfIpInRange,
     getOpenPortsOfIp,
-    getOpenPortsOfLocalNetworkInRange,
-    getOpenPortsOfLocalNetwork,
+    getOpenPortsOnLocalNetworkInRange,
+    getOpenPortsOnLocalNetwork,
     getLocalNetworkCidr
  }

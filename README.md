@@ -18,7 +18,7 @@ async function start () {
     console.log( await netJS.isLocalhost() );
 
     // we want to get all connected client in the local networks and their open ports (within a range of 0 to 100) with a timeout of a 1000 milliseconds
-    console.log( await netJS.getOpenPortsOfLocalNetworkInRange( 0, 100, 1000) );
+    console.log( await netJS.getOpenPortsOnLocalNetworkInRange( 0, 100, 1000) );
 }
 
 // let's start the function
@@ -263,14 +263,14 @@ obviously it only works if an hostname is registered
 @returns array of devices connected to the local network
 
 ```javascript
-    const devices = await netJS.getDevices();
+    const devices = await netJS.getDevices(timeout);
 ```
 
 ### getGateways
 
 > With this function you can get an array of all the gateways connected to the typical local network
 <br>
-@returns array of gateways connected to the typical local network
+@returns array of gateways connected 100to the typical local network
 
 ```javascript
     const gateways = await netJS.getGateways();
@@ -353,7 +353,7 @@ obviously it only works if an hostname is registered
 @returns array of all open ports of an ip adress in range
 
 ```javascript
-    const openPortsOfIpInRange = await netJS.getOpenPortsOfIpInRange(ip)
+    const openPortsOfIpInRange = await netJS.getOpenPortsOfIpInRange(ip, startPort, endPort, timeout);
 ```
 
 ### getOpenPortsOfIp
@@ -367,10 +367,10 @@ obviously it only works if an hostname is registered
 @returns array of all open ports of an ip adress
 
 ```javascript
-    const openPortsOfIp = await netJS.getOpenPortsOfIp(ip)
+    const openPortsOfIp = await netJS.getOpenPortsOfIp(ip, timeout)
 ```
 
-### getOpenPortsOfLocalNetworkInRange
+### getOpenPortsOnLocalNetworkInRange
 
 > With this function you can get an array of all open ports of the local network in range and the belonging ip adresses
 <br>
@@ -383,10 +383,10 @@ obviously it only works if an hostname is registered
 @returns array of all open ports of the local network in range
 
 ```javascript
-    const openPortsOfLocalNetworkInRange = await netJS.getOpenPortsOfLocalNetworkInRange(startPort, endPort)
+    const openPortsOnLocalNetworkInRange = await netJS.getOpenPortsOnLocalNetworkInRange(startPort, endPort, timeout)
 ```
 
-### getOpenPortsOfLocalNetwork
+### getOpenPortsOnLocalNetwork
 
 > With this function you can get an array of all open ports of the local network and the belonging ip adresses
 <br>
@@ -395,7 +395,7 @@ obviously it only works if an hostname is registered
 @returns array of all open ports of the local network
 
 ```javascript
-    const openPortsOfLocalNetwork = await netJS.getOpenPortsOfLocalNetwork()
+    const openPortsOnLocalNetwork = await netJS.getOpenPortsOnLocalNetwork(timeout)
 ```
 
 ### getLocalNetworkCidr
@@ -414,6 +414,11 @@ obviously it only works if an hostname is registered
 -----------
 
 ## Changelog
+
+### v1.1.5
+- fixed Documentation
+- fixed isLocalhost
+- changed ip family, because it didnt worked properly for me, because somewhat idk
 
 ### v1.1.4
 - finally fixed the fixed non working imports

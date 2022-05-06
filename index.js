@@ -20,7 +20,7 @@ function getLocalIpv4() {
         Object.keys(ifaces).forEach(function (ifname) {
             let alias = 0;
             ifaces[ifname].forEach(function (iface) {
-                if ('IPv4' !== iface.family || iface.internal !== false) {
+                if (4 !== iface.family || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else if (alias >= 1) {
@@ -50,7 +50,7 @@ function getLocalIpv6() {
         Object.keys(ifaces).forEach(function (ifname) {
             let alias = 0;
             ifaces[ifname].forEach(function (iface) {
-                if ('IPv6' !== iface.family || iface.internal !== false) {
+                if (6 !== iface.family || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv6 addresses
                     return;
                 } else if (alias >= 1) {
@@ -80,7 +80,7 @@ function getLocalIpv4s() {
         Object.keys(ifaces).forEach(function (ifname) {
             let alias = 0;
             ifaces[ifname].forEach(function (iface) {
-                if ('IPv4' !== iface.family || iface.internal !== false) {
+                if (4 !== iface.family || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else if (alias >= 1) {
@@ -110,7 +110,7 @@ function getLocalIpv6s() {
         Object.keys(ifaces).forEach(function (ifname) {
             let alias = 0;
             ifaces[ifname].forEach(function (iface) {
-                if ('IPv6' !== iface.family || iface.internal !== false) {
+                if (6 !== iface.family || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv6 addresses
                     return;
                 } else if (alias >= 1) {
@@ -451,7 +451,7 @@ function getMacAddresses() {
         const macAddresses = [];
         Object.keys(ifaces).forEach(function (ifname) {
             ifaces[ifname].forEach(function (iface) {
-                if ('IPv4' !== iface.family || iface.internal !== false) {
+                if (4 !== iface.family || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else {
@@ -516,7 +516,7 @@ function getGateways() {
         const gateways = [];
         Object.keys(ifaces).forEach(function (ifname) {
             ifaces[ifname].forEach(function (iface) {
-                if ('IPv4' !== iface.family || iface.internal !== false) {
+                if (4 !== iface.family || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else {
@@ -539,7 +539,7 @@ function getNetmasks() {
         const netmasks = [];
         Object.keys(ifaces).forEach(function (ifname) {
             ifaces[ifname].forEach(function (iface) {
-                if ('IPv4' !== iface.family || iface.internal !== false) {
+                if (4 !== iface.family || iface.internal !== false) {
                     // skip over internal (i.e. unknown) and non-ipv4 addresses
                     return;
                 } else {
@@ -587,8 +587,9 @@ function checkPingIp(ip, timeout) {
  * @param ip - the ip address to check
  * @returns The function returns true or false depending on whether the ip address is localhost.
  */
-function isLocalhost(ip) {
-    return ip === getLocalIpv4() || ip === getLocalIpv6();
+// todo fix documentation
+async function isLocalhost(ip) {
+    return ip === await getLocalIpv4() || ip === await getLocalIpv6() || ip === '127.0.0.1' || ip === '::1' || ip === 'localhost';
 }
 
 /**
@@ -674,7 +675,7 @@ async function getOpenPortsOfIp(ip, timeout) {
  * @param timeout - the timeout in milliseconds
  * @returns The function returns an array of objects containing the ip address and the open ports of the local network.
  */
-async function getOpenPortsOfLocalNetworkInRange(startPort, endPort, timeout) {
+async function getOpenPortsOnLocalNetworkInRange(startPort, endPort, timeout) {
     const devices = await getDevices();
     const openPorts = [];
     await Promise.all(devices.map(async function (ip) {
@@ -692,7 +693,7 @@ async function getOpenPortsOfLocalNetworkInRange(startPort, endPort, timeout) {
  * @param timeout - the timeout in milliseconds
  * @returns The function returns an array of objects containing the ip and open ports of all devices on the local network.
  */
-async function getOpenPortsOfLocalNetwork(timeout) {
+async function getOpenPortsOnLocalNetwork(timeout) {
     const devices = await getDevices();
     const openPorts = [];
     await Promise.all(devices.map(async function (ip) {
@@ -733,8 +734,8 @@ module.exports = {
     getLocalIpAddressesWithSpecifiedOpenPort,
     getOpenPortsOfIpInRange,
     getOpenPortsOfIp,
-    getOpenPortsOfLocalNetworkInRange,
-    getOpenPortsOfLocalNetwork,
+    getOpenPortsOnLocalNetworkInRange,
+    getOpenPortsOnLocalNetwork,
     getExternalIpv4,
     getExternalIpv6,
     isConnected,
